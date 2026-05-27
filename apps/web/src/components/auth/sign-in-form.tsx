@@ -77,7 +77,7 @@ export function SignInForm() {
             type="email"
             placeholder="you@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             required
             className="mt-1"
           />

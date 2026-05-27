@@ -5,6 +5,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { Edit2, ExternalLink, MoreHorizontal, Trash2, Users, BarChart2 } from 'lucide-react'
 import {
   Badge,
+  type BadgeProps,
   Button,
   Card,
   CardContent,
@@ -21,7 +22,8 @@ type FunnelWithCounts = Funnel & {
   _count: { leads: number; pageViews: number }
 }
 
-const statusVariant: Record<FunnelStatus, 'published' | 'draft' | 'archived'> = {
+type StatusVariant = NonNullable<BadgeProps['variant']>
+const statusVariant: Record<FunnelStatus, StatusVariant> = {
   PUBLISHED: 'published',
   DRAFT: 'draft',
   ARCHIVED: 'archived',

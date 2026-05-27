@@ -33,7 +33,7 @@ export function EditorPanel({ page }: EditorPanelProps) {
       </div>
       <ScrollArea className="flex-1">
         <div className="p-4 space-y-4">
-          {selectedBlock !== null && selectedBlockIndex !== null ? (
+          {selectedBlock !== null && selectedBlock !== undefined && selectedBlockIndex !== null ? (
             <BlockSettings
               block={selectedBlock}
               onUpdate={(updated) => updateBlock(page.id, selectedBlockIndex, updated)}
@@ -73,7 +73,7 @@ function BlockSettings({
             className="mt-1 text-sm"
             value={block.text}
             rows={4}
-            onChange={(e) => onUpdate({ ...block, text: e.target.value } as Block)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => onUpdate({ ...block, text: e.target.value } as Block)}
           />
         </div>
       )}
@@ -86,7 +86,7 @@ function BlockSettings({
             <Input
               className="mt-1 text-sm"
               value={block.text}
-              onChange={(e) => onUpdate({ ...block, text: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...block, text: e.target.value })}
             />
           </div>
           <div>
@@ -94,7 +94,7 @@ function BlockSettings({
             <Input
               className="mt-1 text-sm"
               value={block.linkTo}
-              onChange={(e) => onUpdate({ ...block, linkTo: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => onUpdate({ ...block, linkTo: e.target.value })}
             />
           </div>
           <div>
@@ -156,7 +156,7 @@ function PageSettings({ page }: { page: FunnelPage }) {
         <Input
           className="mt-1 text-sm"
           value={page.name}
-          onChange={(e) => updatePage(page.id, { name: e.target.value })}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => updatePage(page.id, { name: e.target.value })}
         />
       </div>
       <div>
@@ -164,7 +164,7 @@ function PageSettings({ page }: { page: FunnelPage }) {
         <select
           className="mt-1 w-full text-sm border border-input rounded-md px-2 py-1.5"
           value={page.type}
-          onChange={(e) =>
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
             updatePage(page.id, { type: e.target.value as FunnelPage['type'] })
           }
         >

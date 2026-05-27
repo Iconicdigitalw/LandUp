@@ -59,11 +59,11 @@ Rewrite the block following the instruction. Return ONLY the updated block JSON,
   })
 
   const content = message.content[0]
-  if (content.type !== 'text') throw new Error('Unexpected AI response type')
+  if (!content || content.type !== 'text') throw new Error('Unexpected AI response type')
 
   // Extract JSON from response (handle code blocks)
   const jsonMatch = content.text.match(/```(?:json)?\s*([\s\S]*?)```/)
-  const jsonStr = jsonMatch ? jsonMatch[1] : content.text.trim()
+  const jsonStr = jsonMatch?.[1] ?? content.text.trim()
 
   return JSON.parse(jsonStr) as Block
 }

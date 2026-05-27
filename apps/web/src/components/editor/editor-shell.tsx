@@ -23,7 +23,7 @@ export function EditorShell({ funnel }: EditorShellProps) {
     const funnelPages = funnel.pages.map((p) => ({
       ...p,
       blocks: Array.isArray(p.blocks) ? p.blocks : [],
-    })) as FunnelPage[]
+    })) as unknown as FunnelPage[]
 
     useEditorStore.setState({
       funnelId: funnel.id,

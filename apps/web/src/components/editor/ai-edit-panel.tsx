@@ -275,14 +275,14 @@ export function AIEditPanel({ funnelId }: AIEditPanelProps) {
           <Textarea
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
             placeholder={
               aiTarget && 'blockIndex' in aiTarget
                 ? 'Describe how to change this block...'
                 : 'Describe the changes you want...'
             }
             className="text-xs resize-none min-h-[60px] max-h-32"
-            onKeyDown={(e) => {
+            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault()
                 handleSend()

@@ -49,10 +49,10 @@ Rules:
   })
 
   const content = message.content[0]
-  if (content.type !== 'text') throw new Error('Unexpected AI response')
+  if (!content || content.type !== 'text') throw new Error('Unexpected AI response')
 
   const jsonMatch = content.text.match(/```(?:json)?\s*([\s\S]*?)```/)
-  const jsonStr = jsonMatch ? jsonMatch[1] : content.text.trim()
+  const jsonStr = jsonMatch?.[1] ?? content.text.trim()
 
   return JSON.parse(jsonStr) as BrandProfileResult
 }
@@ -97,6 +97,6 @@ Return ONLY the rewritten text, no quotes, no explanation.`
   })
 
   const content = message.content[0]
-  if (content.type !== 'text') throw new Error('Unexpected AI response')
+  if (!content || content.type !== 'text') throw new Error('Unexpected AI response')
   return content.text.trim()
 }

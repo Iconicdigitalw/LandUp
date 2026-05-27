@@ -96,11 +96,11 @@ export function CreateFunnelButton() {
                 <Input
                   id="funnel-name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                   placeholder="e.g. My Coaching Funnel"
                   className="mt-1"
                   autoFocus
-                  onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleCreate()}
                 />
               </div>
               <div className="flex gap-2 justify-end">
