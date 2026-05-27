@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum Plan {
+  FREE
+  STARTER
+  GROWTH
+  PRO
+}
+
+enum FunnelStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PageType {
+  HERO
+  BRIDGE
+  QUIZ
+  OPTIN
+  RESULT
+}
+
+// ─── User ────────────────────────────────────────────────────────────────────
+
+model User {
+  id              String   @id @default(cuid())
+  email           String   @unique
+  emailVerified   DateTime?
+  name            String?
+  image           String?
+  plan            Plan     @default(FREE)
+  stripeCustomerId String?
+  funnels         Funnel[]
+  accounts        Account[]
+  sessions        Session[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ─── NextAuth ────────────────────────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ─── Theme ───────────────────────────────────────────────────────────────────
+
+model Theme {
+  id           String   @id @default(cuid())
+  name         String
+  primaryColor String
+  accentColor  String
+  bgLight      String
+  bgDarker     String
+  fontFamily   String
+  borderRadius String
+  isDefault    Boolean  @default(false)
+  funnels      Funnel[]
+
+  @@map("themes")
+}
+
+// ─── Funnel ──────────────────────────────────────────────────────────────────
+
+model Funnel {
+  id              String       @id @default(cuid())
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  slug            String       @unique
+  status          FunnelStatus @default(DRAFT)
+  brandProfile    Json?        // BrandProfile JSON
+  themeId         String?
+  theme           Theme?       @relation(fields: [themeId], references: [id])
+  themeOverrides  Json?        // per-funnel CSS variable overrides
+  backButton      Boolean      @default(true)
+  webhookUrl      String?
+  pages           Page[]
+  leads           Lead[]
+  pageViews       PageView[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@map("funnels")
+}
+
+// ─── Page ────────────────────────────────────────────────────────────────────
+
+model Page {
+  id        String   @id @default(cuid())
+  funnelId  String
+  funnel    Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
+  order     Int
+  name      String
+  type      PageType
+  isResult  Boolean  @default(false)
+  minScore  Int?     // result routing threshold (min)
+  maxScore  Int?     // result routing threshold (max)
+  blocks    Json     // Block[] array
+
+  @@map("pages")
+}
+
+// ─── Lead ────────────────────────────────────────────────────────────────────
+
+model Lead {
+  id           String   @id @default(cuid())
+  funnelId     String
+  funnel       Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
+  name         String?
+  email        String
+  phone        String?
+  quizAnswers  Json     // Record<string, string>
+  score        Int?
+  resultPageId String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  device       String?
+  createdAt    DateTime @default(now())
+
+  @@map("leads")
+}
+
+// ─── Analytics ───────────────────────────────────────────────────────────────
+
+model PageView {
+  id        String   @id @default(cuid())
+  funnelId  String
+  funnel    Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
+  pageId    String
+  sessionId String
+  createdAt DateTime @default(now())
+
+  @@map("page_views")
+}
