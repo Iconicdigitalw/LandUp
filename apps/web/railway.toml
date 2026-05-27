@@ -1,11 +1,7 @@
 [build]
-builder = "nixpacks"
 buildCommand = "cd ../.. && pnpm install --no-frozen-lockfile && pnpm db:generate && pnpm --filter @landup/web build"
 
 [deploy]
 startCommand = "pnpm --filter @landup/web start"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
-
-[nixpacks]
-pkgs = ["nodejs_22"]

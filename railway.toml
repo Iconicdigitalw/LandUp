@@ -1,6 +1,3 @@
-[build]
-builder = "nixpacks"
-
 [deploy]
 # Root-level railway.toml — individual services are configured
 # via their own railway.toml in apps/web and apps/funnel
