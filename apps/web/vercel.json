@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd ../.. && pnpm db:generate && pnpm --filter @landup/web build",
+  "outputDirectory": "apps/web/.next",
+  "installCommand": "pnpm install --no-frozen-lockfile",
+  "framework": "nextjs",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
