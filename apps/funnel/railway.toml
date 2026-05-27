@@ -1,0 +1,11 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd ../.. && pnpm install --no-frozen-lockfile && pnpm db:generate && pnpm --filter @landup/funnel build"
+
+[deploy]
+startCommand = "pnpm --filter @landup/funnel start"
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[nixpacks]
+pkgs = ["nodejs_22"]
