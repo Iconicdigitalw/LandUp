@@ -1,6 +1,5 @@
 [build]
-builder = "nixpacks"
+# Builder defaults to RAILPACK — build and start commands are configured in the Railway dashboard
 
 [deploy]
-# Root-level railway.toml — individual services are configured
-# via their own railway.toml in apps/web and apps/funnel
+# Root-level railway.toml — individual services are configured per-service in the Railway dashboard
