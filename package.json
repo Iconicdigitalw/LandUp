@@ -3,6 +3,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "start": "pnpm --filter @landup/web start",
+    "start:funnel": "pnpm --filter @landup/funnel start",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
